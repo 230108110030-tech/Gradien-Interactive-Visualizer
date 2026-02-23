@@ -9,7 +9,6 @@ Untuk: SMP Negeri 2 Lawang, Kelas VIII-H
 
 import streamlit as st
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import numpy as np
 import random
 from fractions import Fraction
@@ -25,864 +24,807 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-#  GLOBAL CSS
+#  CSS
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'Nunito', sans-serif;
+html, body, [class*="css"], .stApp, p, div, span, label, h1, h2, h3 {
+    font-family: 'Nunito', sans-serif !important;
 }
 
-/* Hide default Streamlit header/footer */
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
+#MainMenu, footer, header { visibility: hidden; }
 
-/* Page background */
-.stApp {
-    background-color: #F4F7FF;
-}
+.stApp { background-color: #F4F7FF; }
 
-/* App header */
+/* ── Header ── */
 .app-header {
-    background: linear-gradient(135deg, #3A0CA3, #4361EE);
-    padding: 28px 40px 22px 40px;
-    border-radius: 0 0 0 0;
-    margin-bottom: 0;
+    background: linear-gradient(135deg, #3A0CA3 0%, #4361EE 100%);
+    padding: 26px 40px 20px 40px;
+    margin: -1rem -1rem 0 -1rem;
 }
-.app-header h1 {
-    color: white;
-    font-size: 2.2rem;
-    font-weight: 800;
-    margin: 0;
-    letter-spacing: -0.5px;
-}
-.app-header p {
-    color: #A5B4FC;
-    margin: 4px 0 0 0;
-    font-size: 1rem;
-}
+.app-title { color: white; font-size: 2rem; font-weight: 900; margin: 0; }
+.app-sub   { color: #A5B4FC; font-size: 0.95rem; margin: 4px 0 0 0; }
 .accent-stripe {
     height: 5px;
     background: linear-gradient(90deg, #F72585, #4361EE, #06D6A0);
-    margin-bottom: 20px;
+    margin: 0 -1rem 20px -1rem;
 }
 
-/* Nav tabs */
-.stRadio > div {
-    flex-direction: row;
-    gap: 12px;
-}
-.stRadio label {
-    background: #4361EE;
-    color: white !important;
-    padding: 10px 24px;
-    border-radius: 8px;
+/* ── Buttons ── */
+.stButton > button {
+    font-family: 'Nunito', sans-serif !important;
     font-weight: 700;
     font-size: 0.95rem;
+    padding: 10px 0;
+    border-radius: 8px;
+    border: none;
     cursor: pointer;
+    width: 100%;
+    transition: opacity 0.15s;
+    color: white !important;
+    background-color: #4361EE !important;
+}
+.stButton > button:hover { opacity: 0.88; }
+
+/* ── Inputs ── */
+.stTextInput > div > div > input {
+    font-family: 'Nunito', sans-serif !important;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 8px;
+    border: 2px solid #CBD5E1;
+    padding: 8px 12px;
+    background: #F8FAFF;
+}
+.stTextInput > div > div > input:focus {
+    border-color: #4361EE;
+    box-shadow: 0 0 0 3px rgba(67,97,238,0.15);
+}
+.stTextInput > label {
+    font-family: 'Nunito', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.92rem !important;
+    color: #1E293B !important;
 }
 
-/* Cards */
-.card {
+/* ── Cards ── */
+.panel-card {
     background: white;
     border-radius: 14px;
-    padding: 28px;
-    box-shadow: 0 2px 12px rgba(67,97,238,0.08);
-    margin-bottom: 18px;
+    padding: 26px 28px;
+    box-shadow: 0 2px 14px rgba(67,97,238,0.09);
 }
-.card-green  { background: #E8F5E9; border-left: 5px solid #16A34A; border-radius: 10px; padding: 22px 26px; margin-bottom: 20px; }
-.card-orange { background: #FFF3E0; border-left: 5px solid #EA580C; border-radius: 10px; padding: 22px 26px; margin-bottom: 20px; }
-.card-purple { background: #F3E5F5; border-left: 5px solid #9333EA; border-radius: 10px; padding: 22px 26px; margin-bottom: 20px; }
+.titik-label {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: white;
+    margin-bottom: 10px;
+}
 
-/* Result box */
+/* ── Result box ── */
 .result-box {
     background: #EEF2FF;
     border-radius: 12px;
-    padding: 22px;
+    padding: 20px 16px;
     text-align: center;
+    margin-top: 14px;
 }
-.result-value {
-    font-size: 2.2rem;
-    font-weight: 800;
-    margin: 6px 0;
-}
-.result-desc {
-    color: #64748B;
-    font-size: 0.95rem;
-}
+.result-label { color: #64748B; font-size: 0.78rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
+.result-value { font-size: 2rem; font-weight: 900; margin: 6px 0 4px 0; }
+.result-desc  { color: #64748B; font-size: 0.92rem; }
 
-/* Steps */
-.step-card {
+/* ── Step cards ── */
+.step-wrap {
     background: white;
     border-radius: 10px;
-    padding: 18px 22px;
     margin-bottom: 12px;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    overflow: hidden;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+}
+.step-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    gap: 12px;
 }
 .step-badge {
-    display: inline-block;
-    padding: 3px 14px;
+    padding: 4px 14px;
     border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 0.78rem;
+    font-weight: 800;
     color: white;
-    margin-bottom: 8px;
+    white-space: nowrap;
 }
+.step-title { font-weight: 800; font-size: 1rem; color: #1E293B; }
+.step-body  { padding: 6px 18px 16px 18px; }
 .formula-box {
-    background: #EEF2FF;
     border-radius: 8px;
-    padding: 12px 20px;
+    padding: 11px 18px;
     font-family: 'Courier New', monospace;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: #3A0CA3;
-    margin: 10px 0;
+    margin: 8px 0;
+    display: inline-block;
 }
+.keterangan { color: #64748B; font-style: italic; font-size: 0.88rem; margin: 4px 0 2px 18px; }
+.bullet-line { margin: 5px 0 5px 4px; }
+
+/* ── Conclusion ── */
 .conclusion-box {
     background: #ECFDF5;
-    border: 1.5px solid #06D6A0;
+    border: 2px solid #06D6A0;
     border-radius: 12px;
-    padding: 20px 26px;
-    margin-top: 16px;
+    padding: 18px 24px;
+    margin-top: 14px;
 }
+.conc-label   { color: #16A34A; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; }
+.conc-summary { font-size: 1.25rem; font-weight: 900; color: #1E293B; margin: 8px 0 4px 0; }
+.conc-desc    { color: #64748B; }
 
-/* Score box */
+/* ── Score ── */
 .score-box {
     background: #4361EE;
-    color: white;
-    border-radius: 10px;
-    padding: 18px;
+    border-radius: 12px;
+    padding: 16px;
     text-align: center;
+    color: white;
     font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 16px;
+    font-weight: 900;
+    margin-bottom: 14px;
 }
 
-/* Review sections */
-.review-header {
+/* ── Drill question card ── */
+.drill-q-card {
+    background: #EEF2FF;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    line-height: 1.7;
+}
+.drill-q-num { color: #4361EE; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 6px; }
+
+/* ── Feedback ── */
+.fb-correct {
+    background: #ECFDF5; border: 2px solid #06D6A0;
+    border-radius: 10px; padding: 14px 18px;
+    color: #065F46; font-weight: 800; text-align: center; font-size: 1.05rem;
+}
+.fb-wrong {
+    background: #FEF2F2; border: 2px solid #EF233C;
+    border-radius: 10px; padding: 14px 18px;
+    color: #991B1B; font-weight: 800; text-align: center; font-size: 1.05rem;
+}
+.fb-hint {
+    background: #FFFBEB; border: 2px solid #FFB703;
+    border-radius: 10px; padding: 14px 18px;
+    color: #92400E; font-weight: 600; line-height: 1.8;
+}
+
+/* ── Review ── */
+.review-banner {
     background: #FFB703;
     border-radius: 12px;
     padding: 20px 30px;
-    margin-bottom: 24px;
-}
-.review-header h2 {
+    margin-bottom: 26px;
     color: white;
-    font-size: 1.6rem;
-    font-weight: 800;
-    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 900;
 }
-.section-title {
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin: 0 0 14px 0;
-}
-.review-content p { margin: 6px 0; line-height: 1.7; }
+.sec-card { border-radius: 12px; padding: 24px 28px; margin-bottom: 22px; line-height: 1.8; }
+.sec-card-green  { background: #E8F5E9; border-left: 6px solid #16A34A; }
+.sec-card-orange { background: #FFF3E0; border-left: 6px solid #EA580C; }
+.sec-card-purple { background: #F3E5F5; border-left: 6px solid #9333EA; }
 
-/* Feedback messages */
-.feedback-correct {
-    background: #ECFDF5;
-    border: 2px solid #06D6A0;
-    border-radius: 10px;
-    padding: 16px 20px;
-    text-align: center;
-    color: #065F46;
-    font-weight: 700;
-    font-size: 1.1rem;
+.sec-num-title {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 2px solid rgba(0,0,0,0.08);
 }
-.feedback-wrong {
-    background: #FEF2F2;
-    border: 2px solid #EF233C;
-    border-radius: 10px;
-    padding: 16px 20px;
-    text-align: center;
-    color: #991B1B;
-    font-weight: 700;
-    font-size: 1.1rem;
-}
-.feedback-hint {
-    background: #FFFBEB;
-    border: 2px solid #FFB703;
-    border-radius: 10px;
-    padding: 16px 20px;
-    color: #92400E;
-    font-weight: 600;
-}
-.info-tip {
-    background: #4361EE;
-    color: white;
-    border-radius: 10px;
-    padding: 18px 24px;
-    font-weight: 600;
-    margin-top: 12px;
-}
-
-/* Divider */
-.review-divider {
-    border: none;
-    border-top: 2px solid #CBD5E1;
-    margin: 18px 0;
-}
+.sec-num   { font-size: 1.6rem; }
+.sec-title { font-size: 1.15rem; font-weight: 900; }
+.sec-subtitle { font-weight: 800; font-size: 0.95rem; color: #1E293B; margin: 14px 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+.sec-divider { border: none; border-top: 1.5px solid rgba(0,0,0,0.10); margin: 16px 0; }
+.contoh-label { font-weight: 800; font-size: 1rem; margin: 14px 0 6px 0; }
+.kesimpulan-box { border-radius: 8px; padding: 10px 16px; margin-top: 10px; background: rgba(255,255,255,0.6); font-size: 0.95rem; }
+.info-banner { background: #4361EE; color: white; border-radius: 12px; padding: 18px 24px; font-weight: 600; margin-top: 8px; line-height: 1.8; }
 </style>
 """, unsafe_allow_html=True)
 
+
 # ─────────────────────────────────────────────
-#  HELPER FUNCTIONS
+#  HELPERS
 # ─────────────────────────────────────────────
 def fraction_str(numerator, denominator):
     if denominator == 0:
         return "tak terdefinisi"
     f = Fraction(int(round(numerator)), int(round(denominator)))
-    if f.denominator == 1:
-        return str(f.numerator)
-    return f"{f.numerator}/{f.denominator}"
+    return str(f.numerator) if f.denominator == 1 else f"{f.numerator}/{f.denominator}"
 
 def format_num(v):
-    if v == int(v):
-        return str(int(v))
-    return f"{v:.1f}"
+    return str(int(v)) if v == int(v) else f"{v:.1f}"
+
+def parse_coord(s):
+    try:
+        return float(s.strip().replace(",", "."))
+    except Exception:
+        return None
 
 def build_steps(x1, y1, x2, y2):
     x1s, y1s = format_num(x1), format_num(y1)
     x2s, y2s = format_num(x2), format_num(y2)
-    dx = x2 - x1
-    dy = y2 - y1
+    dx, dy = x2 - x1, y2 - y1
     dxs, dys = format_num(dx), format_num(dy)
     steps = []
 
     # Langkah 1
     if x1 == 0 and y1 == 0:
-        step1_lines = [
-            {"type": "bullet", "text": f"Titik pertama : O(0, 0)  ← Titik pusat / origin"},
-            {"type": "bullet", "text": f"Titik kedua   : ({x2s}, {y2s})"},
-        ]
+        lines = [("bullet", f"Titik pertama : O(0, 0)  ← Titik pusat / origin"),
+                 ("bullet", f"Titik kedua   : ({x2s}, {y2s})")]
     else:
-        step1_lines = [
-            {"type": "bullet", "text": f"Titik pertama : ({x1s}, {y1s})  →  x₁ = {x1s},  y₁ = {y1s}"},
-            {"type": "bullet", "text": f"Titik kedua   : ({x2s}, {y2s})  →  x₂ = {x2s},  y₂ = {y2s}"},
-        ]
-    steps.append({"title": "Identifikasi Koordinat Titik", "lines": step1_lines})
+        lines = [("bullet", f"Titik pertama : ({x1s}, {y1s})  →  x₁ = {x1s},  y₁ = {y1s}"),
+                 ("bullet", f"Titik kedua   : ({x2s}, {y2s})  →  x₂ = {x2s},  y₂ = {y2s}")]
+    steps.append({"title": "Identifikasi Koordinat Titik", "lines": lines})
 
     # Langkah 2
     if x1 == 0 and y1 == 0:
-        step2_lines = [
-            {"type": "text", "text": "Karena garis melewati titik pusat O(0, 0), digunakan rumus khusus yang lebih sederhana:"},
-            {"type": "formula", "text": "m  =  y / x"},
-            {"type": "keterangan", "text": "di mana x dan y adalah koordinat titik kedua (selain O)"},
-        ]
+        lines = [("text",      "Karena garis melewati titik pusat O(0,0), digunakan rumus khusus:"),
+                 ("formula",   "m  =  y / x"),
+                 ("keterangan","di mana x dan y adalah koordinat titik kedua (selain O)")]
     else:
-        step2_lines = [
-            {"type": "text", "text": "Gunakan rumus gradien dua titik:"},
-            {"type": "formula", "text": "m  =  (y₂ − y₁) / (x₂ − x₁)"},
-            {"type": "keterangan", "text": "Rumus ini berlaku untuk semua pasang titik selama x₂ ≠ x₁"},
-        ]
-    steps.append({"title": "Rumus yang Digunakan", "lines": step2_lines})
+        lines = [("text",      "Gunakan rumus gradien dua titik:"),
+                 ("formula",   "m  =  (y₂ − y₁) / (x₂ − x₁)"),
+                 ("keterangan","Rumus ini berlaku untuk semua pasang titik selama x₂ ≠ x₁")]
+    steps.append({"title": "Rumus yang Digunakan", "lines": lines})
 
-    # Langkah 3
+    # Langkah 3 — vertical case
     if dx == 0:
-        step3_lines = [
-            {"type": "text", "text": "Masukkan nilai koordinat ke dalam rumus:"},
-            {"type": "formula", "text": f"m  =  ({y2s} − {y1s}) / ({x2s} − {x1s})"},
-            {"type": "formula", "text": f"m  =  {dys} / {dxs}"},
-        ]
-        steps.append({"title": "Substitusi Nilai", "lines": step3_lines})
-        steps.append({
-            "title": "Cek Penyebut (x₂ − x₁)",
-            "lines": [
-                {"type": "text", "text": f"Diperoleh x₂ − x₁ = {dxs}"},
-                {"type": "text", "text": "⚠️ Karena penyebut = 0, gradien TIDAK TERDEFINISI. Ini adalah garis vertikal."},
-            ]
-        })
+        steps.append({"title": "Substitusi Nilai", "lines": [
+            ("text",    "Masukkan nilai koordinat ke dalam rumus:"),
+            ("formula", f"m  =  ({y2s} − {y1s}) / ({x2s} − {x1s})"),
+            ("formula", f"m  =  {dys} / {dxs}"),
+        ]})
+        steps.append({"title": "Cek Penyebut (x₂ − x₁)", "lines": [
+            ("text", f"Diperoleh x₂ − x₁ = {dxs}"),
+            ("text", "⚠️ Karena penyebut = 0, gradien TIDAK TERDEFINISI. Ini adalah garis vertikal."),
+        ]})
         return steps
 
     if x1 == 0 and y1 == 0:
-        step3_lines = [
-            {"type": "text", "text": "Masukkan koordinat titik kedua ke dalam rumus:"},
-            {"type": "formula", "text": f"m  =  {y2s} / {x2s}"},
-        ]
+        lines = [("text",    "Masukkan koordinat titik kedua ke dalam rumus:"),
+                 ("formula", f"m  =  {y2s} / {x2s}")]
     else:
-        step3_lines = [
-            {"type": "text", "text": "Masukkan nilai koordinat ke dalam rumus:"},
-            {"type": "formula", "text": f"m  =  ({y2s} − {y1s}) / ({x2s} − {x1s})"},
-            {"type": "formula", "text": f"m  =  {dys} / {dxs}"},
-        ]
-    steps.append({"title": "Substitusi Nilai", "lines": step3_lines})
+        lines = [("text",    "Masukkan nilai koordinat ke dalam rumus:"),
+                 ("formula", f"m  =  ({y2s} − {y1s}) / ({x2s} − {x1s})"),
+                 ("formula", f"m  =  {dys} / {dxs}")]
+    steps.append({"title": "Substitusi Nilai", "lines": lines})
 
     # Langkah 4
-    frac = Fraction(int(round(dy)), int(round(dx)))
+    frac  = Fraction(int(round(dy)), int(round(dx)))
     m_str = fraction_str(dy, dx)
     if frac.denominator == 1:
-        simplify_lines = [
-            {"type": "text", "text": "Bagi pembilang dan penyebut:"},
-            {"type": "formula", "text": f"m  =  {dys} ÷ {dxs}  =  {m_str}"},
-            {"type": "keterangan", "text": "Hasil sudah berupa bilangan bulat, tidak perlu disederhanakan lagi."},
-        ]
+        lines = [("text",       "Bagi pembilang dan penyebut:"),
+                 ("formula",    f"m  =  {dys} ÷ {dxs}  =  {m_str}"),
+                 ("keterangan", "Hasil sudah berupa bilangan bulat.")]
     else:
-        simplify_lines = [
-            {"type": "text", "text": "Sederhanakan pecahan dengan membagi pembilang dan penyebut dengan FPB-nya:"},
-            {"type": "formula", "text": f"m  =  {dys}/{dxs}  =  {m_str}"},
-            {"type": "keterangan", "text": f"Pecahan {dys}/{dxs} disederhanakan menjadi {m_str} (bentuk paling sederhana)."},
-        ]
-    steps.append({"title": "Sederhanakan / Hitung Hasil", "lines": simplify_lines})
+        lines = [("text",       "Sederhanakan pecahan dengan membagi dengan FPB-nya:"),
+                 ("formula",    f"m  =  {dys}/{dxs}  =  {m_str}"),
+                 ("keterangan", f"Pecahan {dys}/{dxs} disederhanakan menjadi {m_str}.")]
+    steps.append({"title": "Sederhanakan / Hitung Hasil", "lines": lines})
     return steps
 
 def build_conclusion(x1, y1, x2, y2):
-    dx = x2 - x1
-    dy = y2 - y1
+    dx, dy = x2 - x1, y2 - y1
     if dx == 0:
-        return {
-            "summary": "Gradien tidak terdefinisi  (garis vertikal)",
-            "desc": "Garis vertikal tidak memiliki nilai gradien karena penyebutnya = 0.",
-            "color": "#64748B"
-        }
-    m = Fraction(int(round(dy)), int(round(dx)))
+        return {"summary": "Gradien tidak terdefinisi  (garis vertikal)",
+                "desc":    "Garis vertikal tidak memiliki nilai gradien karena penyebutnya = 0.",
+                "color":   "#64748B"}
     m_str = fraction_str(dy, dx)
-    m_val = float(m)
+    m_val = dy / dx
     if m_val > 0:
-        desc = "📈  Garis NAIK dari kiri ke kanan  →  gradien bernilai POSITIF"
-        color = "#06D6A0"
+        return {"summary": f"Gradien garis  =  m  =  {m_str}",
+                "desc":    "📈  Garis NAIK dari kiri ke kanan  →  gradien bernilai POSITIF", "color": "#06D6A0"}
     elif m_val < 0:
-        desc = "📉  Garis TURUN dari kiri ke kanan  →  gradien bernilai NEGATIF"
-        color = "#EF233C"
+        return {"summary": f"Gradien garis  =  m  =  {m_str}",
+                "desc":    "📉  Garis TURUN dari kiri ke kanan  →  gradien bernilai NEGATIF", "color": "#EF233C"}
     else:
-        desc = "➡️  Garis HORIZONTAL  →  gradien bernilai NOL"
-        color = "#4361EE"
-    return {"summary": f"Gradien garis  =  m  =  {m_str}", "desc": desc, "color": color}
+        return {"summary": f"Gradien garis  =  m  =  {m_str}",
+                "desc":    "➡️  Garis HORIZONTAL  →  gradien bernilai NOL", "color": "#4361EE"}
 
-def draw_graph(x1, y1, x2, y2, color, title="Visualisasi Garis Lurus"):
+def render_steps(x1, y1, x2, y2):
+    x1s, y1s = format_num(x1), format_num(y1)
+    x2s, y2s = format_num(x2), format_num(y2)
+    if x1 == 0 and y1 == 0:
+        soal = f"Tentukan gradien garis yang melalui titik O(0, 0) dan ({x2s}, {y2s})"
+    else:
+        soal = f"Tentukan gradien garis yang melalui titik ({x1s}, {y1s}) dan ({x2s}, {y2s})"
+    st.info(f"📌 **SOAL**\n\n{soal}")
+
+    colors = ["#0284C7","#16A34A","#EA580C","#9333EA","#E91E63"]
+    for i, step in enumerate(build_steps(x1, y1, x2, y2)):
+        c = colors[i % len(colors)]
+        st.markdown(
+            f'<div class="step-wrap">'
+            f'<div class="step-header" style="border-left:5px solid {c};">'
+            f'<span class="step-badge" style="background:{c};">Langkah {i+1}</span>'
+            f'<span class="step-title">{step["title"]}</span>'
+            f'</div><div class="step-body">',
+            unsafe_allow_html=True)
+        for ltype, text in step["lines"]:
+            if ltype   == "text":
+                st.markdown(f"<p style='margin:6px 0;color:#1E293B;'>{text}</p>", unsafe_allow_html=True)
+            elif ltype == "bullet":
+                st.markdown(f"<p class='bullet-line'>• {text}</p>", unsafe_allow_html=True)
+            elif ltype == "formula":
+                st.markdown(f'<div class="formula-box" style="background:#EEF2FF;color:#3A0CA3;">{text}</div>', unsafe_allow_html=True)
+            elif ltype == "keterangan":
+                st.markdown(f"<p class='keterangan'>{text}</p>", unsafe_allow_html=True)
+        st.markdown("</div></div>", unsafe_allow_html=True)
+
+    conc = build_conclusion(x1, y1, x2, y2)
+    st.markdown(
+        f'<div class="conclusion-box">'
+        f'<div class="conc-label">✅  KESIMPULAN</div>'
+        f'<div class="conc-summary">{conc["summary"]}</div>'
+        f'<div class="conc-desc">{conc["desc"]}</div>'
+        f'</div>', unsafe_allow_html=True)
+
+def make_graph(x1, y1, x2, y2, color, title):
     fig, ax = plt.subplots(figsize=(7, 6))
     fig.patch.set_facecolor("#FAFBFF")
     ax.set_facecolor("#F0F4FF")
-
     xr = max(abs(x1), abs(x2), 5) + 3
     yr = max(abs(y1), abs(y2), 5) + 3
-    ax.set_xlim(-xr, xr)
-    ax.set_ylim(-yr, yr)
-
+    ax.set_xlim(-xr, xr); ax.set_ylim(-yr, yr)
     ax.axhline(0, color="#94A3B8", linewidth=1.2)
     ax.axvline(0, color="#94A3B8", linewidth=1.2)
     ax.grid(True, linestyle="--", linewidth=0.6, color="#CBD5E1", alpha=0.8)
-
-    ax.plot([x1, x2], [y1, y2], color=color, linewidth=3.5,
-            marker="o", markersize=11, markeredgecolor="white",
-            markeredgewidth=2, zorder=4)
-
-    bbox_props = dict(boxstyle="round,pad=0.4", facecolor="white",
-                      edgecolor=color, linewidth=1.5, alpha=0.9)
-    off = max(xr, yr) * 0.07
-    ax.annotate(f"({format_num(x1)}, {format_num(y1)})",
-                xy=(x1, y1), xytext=(x1 + off, y1 + off),
-                fontsize=11, fontweight="bold", bbox=bbox_props, color=color)
-    ax.annotate(f"({format_num(x2)}, {format_num(y2)})",
-                xy=(x2, y2), xytext=(x2 + off, y2 + off),
-                fontsize=11, fontweight="bold", bbox=bbox_props, color=color)
-
+    ax.plot([x1,x2],[y1,y2], color=color, linewidth=3.5, marker="o", markersize=11,
+            markeredgecolor="white", markeredgewidth=2, zorder=4)
+    off  = max(xr, yr) * 0.07
+    bbox = dict(boxstyle="round,pad=0.4", facecolor="white", edgecolor=color, linewidth=1.5, alpha=0.9)
+    ax.annotate(f"({format_num(x1)}, {format_num(y1)})", xy=(x1,y1),
+                xytext=(x1+off, y1+off), fontsize=11, fontweight="bold", bbox=bbox, color=color)
+    ax.annotate(f"({format_num(x2)}, {format_num(y2)})", xy=(x2,y2),
+                xytext=(x2+off, y2+off), fontsize=11, fontweight="bold", bbox=bbox, color=color)
     ax.set_xlabel("x", fontsize=13, fontweight="bold", color="#4361EE")
     ax.set_ylabel("y", fontsize=13, fontweight="bold", color="#4361EE")
     ax.set_title(title, fontsize=15, fontweight="bold", color="#3A0CA3", pad=14)
     fig.tight_layout()
     return fig
 
-def draw_empty_graph():
+def make_empty_graph(title="Sistem Koordinat Kartesius"):
     fig, ax = plt.subplots(figsize=(7, 6))
     fig.patch.set_facecolor("#FAFBFF")
     ax.set_facecolor("#F0F4FF")
     ax.axhline(0, color="#94A3B8", linewidth=1.2)
     ax.axvline(0, color="#94A3B8", linewidth=1.2)
     ax.grid(True, linestyle="--", linewidth=0.6, color="#CBD5E1", alpha=0.8)
-    ax.set_xlim(-10, 10)
-    ax.set_ylim(-10, 10)
+    ax.set_xlim(-10, 10); ax.set_ylim(-10, 10)
     ax.set_xlabel("x", fontsize=13, fontweight="bold", color="#4361EE")
     ax.set_ylabel("y", fontsize=13, fontweight="bold", color="#4361EE")
-    ax.set_title("Sistem Koordinat Kartesius", fontsize=15, fontweight="bold",
-                 color="#3A0CA3", pad=14)
+    tc = "#3A0CA3" if "Koordinat" in title else "#64748B"
+    ax.set_title(title, fontsize=14, fontweight="bold", color=tc, pad=14)
     fig.tight_layout()
     return fig
 
+
 # ─────────────────────────────────────────────
-#  SESSION STATE INIT
+#  SESSION STATE
 # ─────────────────────────────────────────────
-if "mode" not in st.session_state:
-    st.session_state.mode = "visualizer"
-if "calc_result" not in st.session_state:
-    st.session_state.calc_result = None
-if "show_steps" not in st.session_state:
-    st.session_state.show_steps = False
-if "drill_score" not in st.session_state:
-    st.session_state.drill_score = 0
-if "drill_total" not in st.session_state:
-    st.session_state.drill_total = 0
-if "drill_coords" not in st.session_state:
-    st.session_state.drill_coords = None
-if "drill_feedback" not in st.session_state:
-    st.session_state.drill_feedback = None
-if "drill_answered" not in st.session_state:
-    st.session_state.drill_answered = False
+for k, v in {"mode":"visualizer","calc_result":None,"show_steps":False,
+             "drill_score":0,"drill_total":0,"drill_coords":None,
+             "drill_feedback":None,"drill_answered":False}.items():
+    if k not in st.session_state:
+        st.session_state[k] = v
+
 
 # ─────────────────────────────────────────────
 #  HEADER
 # ─────────────────────────────────────────────
 st.markdown("""
 <div class="app-header">
-    <h1>📐 Gradien Visualizer</h1>
-    <p>Media Pembelajaran Interaktif &nbsp;·&nbsp; SMP Kelas VIII</p>
+    <div class="app-title">📐 Gradien Visualizer</div>
+    <div class="app-sub">Media Pembelajaran Interaktif &nbsp;·&nbsp; SMP Kelas VIII</div>
 </div>
 <div class="accent-stripe"></div>
 """, unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────
-#  NAVIGATION
-# ─────────────────────────────────────────────
-col_nav1, col_nav2, col_nav3, col_nav_rest = st.columns([1.4, 1.6, 1.3, 4])
-with col_nav1:
-    if st.button("📊  Mode Visualizer", use_container_width=True,
-                 type="primary" if st.session_state.mode == "visualizer" else "secondary"):
-        st.session_state.mode = "visualizer"
-        st.session_state.show_steps = False
-        st.rerun()
-with col_nav2:
-    if st.button("🎯  Mode Drill Practice", use_container_width=True,
-                 type="primary" if st.session_state.mode == "drill" else "secondary"):
-        st.session_state.mode = "drill"
-        st.rerun()
-with col_nav3:
-    if st.button("📚  Review Materi", use_container_width=True,
-                 type="primary" if st.session_state.mode == "review" else "secondary"):
-        st.session_state.mode = "review"
-        st.rerun()
 
-st.markdown("<hr style='margin: 6px 0 20px 0; border-color: #E2E8F0;'>", unsafe_allow_html=True)
+# ─────────────────────────────────────────────
+#  NAV
+# ─────────────────────────────────────────────
+nc1, nc2, nc3, _ = st.columns([1.3, 1.5, 1.2, 4])
+with nc1:
+    if st.button("📊  Mode Visualizer", use_container_width=True, key="nav_vis"):
+        st.session_state.mode = "visualizer"; st.session_state.show_steps = False; st.rerun()
+with nc2:
+    if st.button("🎯  Mode Drill Practice", use_container_width=True, key="nav_drill"):
+        st.session_state.mode = "drill"; st.rerun()
+with nc3:
+    if st.button("📚  Review Materi", use_container_width=True, key="nav_review"):
+        st.session_state.mode = "review"; st.rerun()
 
-# ═══════════════════════════════════════════════
-#  MODE: VISUALIZER
-# ═══════════════════════════════════════════════
+# Active button color
+_ac = {"visualizer":"#4361EE","drill":"#F72585","review":"#FFB703"}[st.session_state.mode]
+_ai = {"visualizer":1,"drill":2,"review":3}[st.session_state.mode]
+st.markdown(f"""
+<style>
+div[data-testid="stHorizontalBlock"] > div:nth-child({_ai}) .stButton > button
+    {{ background-color: {_ac} !important; }}
+div[data-testid="stHorizontalBlock"] > div:not(:nth-child({_ai})):not(:nth-child(4)) .stButton > button
+    {{ background-color: #475569 !important; }}
+</style>""", unsafe_allow_html=True)
+
+st.markdown("<hr style='margin:6px 0 20px 0;border-color:#E2E8F0;'>", unsafe_allow_html=True)
+
+
+# ═══════════════════════════════════════════════════════
+#  VISUALIZER
+# ═══════════════════════════════════════════════════════
 if st.session_state.mode == "visualizer":
-    left, right = st.columns([1.1, 1.6])
 
-    with left:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
+    left_col, right_col = st.columns([1.05, 1.6], gap="large")
+
+    with left_col:
+        st.markdown('<div class="panel-card">', unsafe_allow_html=True)
         st.markdown("### 🗂️ Input Koordinat")
         st.caption("Masukkan koordinat dua titik untuk menentukan gradien.")
         st.markdown("---")
 
-        c1, c2 = st.columns(2)
-        with c1:
-            st.markdown("**🔴 Titik 1**")
-            x1_in = st.number_input("x₁", value=0.0, step=1.0, key="x1", label_visibility="visible")
-            y1_in = st.number_input("y₁", value=0.0, step=1.0, key="y1")
-        with c2:
-            st.markdown("**🔵 Titik 2**")
-            x2_in = st.number_input("x₂", value=4.0, step=1.0, key="x2")
-            y2_in = st.number_input("y₂", value=8.0, step=1.0, key="y2")
+        # Titik 1
+        st.markdown('<span class="titik-label" style="background:#EF233C;">🔴  Titik 1</span>',
+                    unsafe_allow_html=True)
+        a1, b1 = st.columns(2)
+        with a1: x1_str = st.text_input("x₁  =", value="0", key="vi_x1")
+        with b1: y1_str = st.text_input("y₁  =", value="0", key="vi_y1")
+        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
+        # Titik 2
+        st.markdown('<span class="titik-label" style="background:#4361EE;">🔵  Titik 2</span>',
+                    unsafe_allow_html=True)
+        a2, b2 = st.columns(2)
+        with a2: x2_str = st.text_input("x₂  =", value="4", key="vi_x2")
+        with b2: y2_str = st.text_input("y₂  =", value="8", key="vi_y2")
         st.markdown("---")
 
-        btn_col1, btn_col2 = st.columns(2)
-        with btn_col1:
-            hitung = st.button("✅ Hitung Gradien", use_container_width=True, type="primary")
-        with btn_col2:
-            reset = st.button("🔄 Reset", use_container_width=True)
+        # Buttons
+        btn_hitung  = st.button("✅  Hitung Gradien",            use_container_width=True, key="vi_hitung")
+        btn_langkah = st.button("📋  Tampilkan Langkah-Langkah", use_container_width=True, key="vi_langkah")
+        btn_reset   = st.button("🔄  Reset",                     use_container_width=True, key="vi_reset")
 
-        langkah = st.button("📋 Tampilkan Langkah-Langkah", use_container_width=True)
+        # Style vis buttons
+        st.markdown("""
+        <style>
+        [data-testid="stVerticalBlock"] [data-testid="element-container"]:has(button[kind="secondary"]) button {
+            background-color: #94A3B8 !important;
+        }
+        </style>""", unsafe_allow_html=True)
 
-        if reset:
+        if btn_reset:
             st.session_state.calc_result = None
-            st.session_state.show_steps = False
+            st.session_state.show_steps  = False
             st.rerun()
 
-        if hitung or langkah:
-            x1, y1, x2, y2 = x1_in, y1_in, x2_in, y2_in
-            dx = x2 - x1
-            dy = y2 - y1
+        def do_calc():
+            x1 = parse_coord(x1_str); y1 = parse_coord(y1_str)
+            x2 = parse_coord(x2_str); y2 = parse_coord(y2_str)
+            if None in (x1, y1, x2, y2):
+                st.session_state.calc_result = {"error": "⚠️ Mohon masukkan angka yang valid di semua kolom."}
+                return
+            dx, dy = x2 - x1, y2 - y1
             if dx == 0:
-                m_str = "tak terdefinisi"
-                desc = "Garis vertikal  (x₁ = x₂)"
-                color = "#94A3B8"
+                st.session_state.calc_result = {
+                    "x1":x1,"y1":y1,"x2":x2,"y2":y2,
+                    "m_str":"tak terdefinisi","desc":"Garis vertikal  (x₁ = x₂)","color":"#94A3B8"}
             else:
                 m_str = fraction_str(dy, dx)
                 m_val = dy / dx
-                if m_val > 0:
-                    color = "#06D6A0"
-                    desc = "📈 Garis naik · gradien positif"
-                elif m_val < 0:
-                    color = "#EF233C"
-                    desc = "📉 Garis turun · gradien negatif"
-                else:
-                    color = "#4361EE"
-                    desc = "➡️ Garis horizontal · gradien nol"
-            st.session_state.calc_result = {
-                "x1": x1, "y1": y1, "x2": x2, "y2": y2,
-                "m_str": m_str, "desc": desc, "color": color
-            }
-            if langkah:
+                if   m_val > 0: color, desc = "#06D6A0", "📈 Garis naik · gradien positif"
+                elif m_val < 0: color, desc = "#EF233C", "📉 Garis turun · gradien negatif"
+                else:           color, desc = "#4361EE", "➡️ Garis horizontal · gradien nol"
+                st.session_state.calc_result = {
+                    "x1":x1,"y1":y1,"x2":x2,"y2":y2,"m_str":m_str,"desc":desc,"color":color}
+
+        if btn_hitung:
+            do_calc(); st.session_state.show_steps = False; st.rerun()
+        if btn_langkah:
+            do_calc()
+            if st.session_state.calc_result and "error" not in st.session_state.calc_result:
                 st.session_state.show_steps = True
             st.rerun()
 
-        # Result box
-        st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
-        if st.session_state.calc_result:
-            r = st.session_state.calc_result
+        # Result
+        r = st.session_state.calc_result
+        if r and "error" in r:
+            st.error(r["error"])
+        elif r:
             st.markdown(f"""
             <div class="result-box">
-                <div style="color:#64748B; font-size:0.85rem; font-weight:700; letter-spacing:1px;">HASIL GRADIEN</div>
-                <div class="result-value" style="color:{r['color']}">m &nbsp;=&nbsp; {r['m_str']}</div>
+                <div class="result-label">Hasil Gradien</div>
+                <div class="result-value" style="color:{r['color']};">m &nbsp;=&nbsp; {r['m_str']}</div>
                 <div class="result-desc">{r['desc']}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            </div>""", unsafe_allow_html=True)
         else:
             st.markdown("""
             <div class="result-box">
-                <div style="color:#64748B; font-size:0.85rem; font-weight:700; letter-spacing:1px;">HASIL</div>
-                <div style="color:#94A3B8; font-size:1.1rem; margin:10px 0;">Masukkan koordinat<br>lalu klik Hitung Gradien</div>
-            </div>
-            """, unsafe_allow_html=True)
+                <div class="result-label">Hasil</div>
+                <div style="color:#94A3B8;font-size:1rem;margin:10px 0;">
+                    Masukkan koordinat<br>lalu klik Hitung Gradien</div>
+            </div>""", unsafe_allow_html=True)
+
         st.markdown('</div>', unsafe_allow_html=True)
 
-    with right:
-        if st.session_state.calc_result:
-            r = st.session_state.calc_result
-            fig = draw_graph(r["x1"], r["y1"], r["x2"], r["y2"], r["color"])
+    with right_col:
+        st.markdown("**Visualisasi Grafik**")
+        r = st.session_state.calc_result
+        if r and "error" not in r:
+            fig = make_graph(r["x1"],r["y1"],r["x2"],r["y2"],r["color"],"Visualisasi Garis Lurus")
         else:
-            fig = draw_empty_graph()
+            fig = make_empty_graph()
         st.pyplot(fig, use_container_width=True)
         plt.close(fig)
 
-    # Steps section (below)
-    if st.session_state.show_steps and st.session_state.calc_result:
-        r = st.session_state.calc_result
+    # Steps below
+    if st.session_state.show_steps and st.session_state.calc_result \
+            and "error" not in st.session_state.calc_result:
         st.markdown("---")
         st.markdown("## 📋 Langkah-Langkah Perhitungan")
+        r = st.session_state.calc_result
+        render_steps(r["x1"],r["y1"],r["x2"],r["y2"])
+        if st.button("❌  Tutup Langkah-Langkah", key="close_steps"):
+            st.session_state.show_steps = False; st.rerun()
 
-        x1, y1, x2, y2 = r["x1"], r["y1"], r["x2"], r["y2"]
-        x1s, y1s = format_num(x1), format_num(y1)
-        x2s, y2s = format_num(x2), format_num(y2)
 
-        # Soal card
-        if x1 == 0 and y1 == 0:
-            soal_text = f"Tentukan gradien garis yang melalui titik O(0, 0) dan ({x2s}, {y2s})"
-        else:
-            soal_text = f"Tentukan gradien garis yang melalui titik ({x1s}, {y1s}) dan ({x2s}, {y2s})"
-
-        st.info(f"📌 **SOAL**\n\n{soal_text}")
-
-        step_colors = ["#0284C7", "#16A34A", "#EA580C", "#9333EA", "#E91E63"]
-        steps_data = build_steps(x1, y1, x2, y2)
-
-        for i, step in enumerate(steps_data):
-            color = step_colors[i % len(step_colors)]
-            with st.container():
-                st.markdown(f"""
-                <div class="step-card" style="border-left: 5px solid {color};">
-                    <span class="step-badge" style="background:{color};">Langkah {i+1}</span>
-                    <strong style="font-size:1.05rem; margin-left:10px;">{step['title']}</strong>
-                """, unsafe_allow_html=True)
-
-                for line in step["lines"]:
-                    ltype = line.get("type", "text")
-                    if ltype == "text":
-                        st.markdown(f"<p style='margin:8px 0; color:#1E293B;'>{line['text']}</p>", unsafe_allow_html=True)
-                    elif ltype == "bullet":
-                        st.markdown(f"<p style='margin:6px 0;'>• {line['text']}</p>", unsafe_allow_html=True)
-                    elif ltype == "formula":
-                        st.markdown(f"<div class='formula-box'>{line['text']}</div>", unsafe_allow_html=True)
-                    elif ltype == "keterangan":
-                        st.markdown(f"<p style='color:#64748B; font-style:italic; font-size:0.9rem; margin:4px 0;'>{line['text']}</p>", unsafe_allow_html=True)
-
-                st.markdown("</div>", unsafe_allow_html=True)
-
-        # Conclusion
-        conc = build_conclusion(x1, y1, x2, y2)
-        st.markdown(f"""
-        <div class="conclusion-box">
-            <div style="color:#16A34A; font-weight:800; font-size:0.9rem; letter-spacing:1px;">✅  KESIMPULAN</div>
-            <div style="font-size:1.3rem; font-weight:800; color:#1E293B; margin:10px 0 6px 0;">{conc['summary']}</div>
-            <div style="color:#64748B;">{conc['desc']}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        if st.button("❌ Tutup Langkah-Langkah"):
-            st.session_state.show_steps = False
-            st.rerun()
-
-# ═══════════════════════════════════════════════
-#  MODE: DRILL PRACTICE
-# ═══════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════
+#  DRILL PRACTICE
+# ═══════════════════════════════════════════════════════
 elif st.session_state.mode == "drill":
-    left, right = st.columns([1.6, 1.1])
 
-    with right:
+    graph_col, ctrl_col = st.columns([1.7, 1], gap="large")
+
+    with ctrl_col:
         # Score
-        st.markdown(f"""
-        <div class="score-box">
-            🏆 Skor &nbsp; {st.session_state.drill_score} / {st.session_state.drill_total}
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="score-box">🏆 Skor &nbsp; {st.session_state.drill_score} / {st.session_state.drill_total}</div>',
+            unsafe_allow_html=True)
 
-        # Question text
+        # Question
         if st.session_state.drill_coords:
-            x1, y1, x2, y2 = st.session_state.drill_coords
-            q_num = st.session_state.drill_total + (0 if st.session_state.drill_answered else 1)
+            qnum = st.session_state.drill_total + (0 if st.session_state.drill_answered else 1)
             st.markdown(f"""
-            <div class="card">
-                <p style="color:#4361EE; font-weight:700; font-size:0.9rem;">SOAL #{q_num}</p>
-                <p style="color:#1E293B; font-size:1rem; margin-top:6px;">
-                    Perhatikan grafik di sebelah kiri.<br>
-                    <strong>Berapa nilai gradien garis tersebut?</strong><br>
-                    <span style="color:#64748B; font-size:0.9rem;">(Tulis sebagai desimal atau pecahan, mis: -1/2)</span>
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
+            <div class="drill-q-card">
+                <div class="drill-q-num">SOAL #{qnum}</div>
+                Perhatikan grafik di sebelah kiri.<br>
+                <strong>Berapa nilai gradien garis tersebut?</strong><br>
+                <span style="color:#64748B;font-size:0.88rem;">(Tulis angka atau pecahan, mis: -1/2)</span>
+            </div>""", unsafe_allow_html=True)
         else:
             st.markdown("""
-            <div class="card" style="text-align:center; color:#64748B;">
-                <p style="font-size:1.1rem;">Klik <strong>Soal Baru</strong> untuk memulai latihan! 🎯</p>
-            </div>
-            """, unsafe_allow_html=True)
+            <div class="drill-q-card" style="text-align:center;color:#64748B;">
+                Klik <strong>Soal Baru</strong> untuk memulai latihan! 🎯
+            </div>""", unsafe_allow_html=True)
 
-        # Answer input
-        ans_input = st.text_input("Gradien ( m ) =", placeholder="contoh: 2 atau -1/2",
-                                   key="drill_ans", disabled=st.session_state.drill_answered)
+        # Input
+        ans_input = st.text_input(
+            "Gradien  ( m )  =",
+            placeholder="contoh: 3  atau  -1/2",
+            key="drill_ans",
+            disabled=st.session_state.drill_answered)
 
-        btn_r1, btn_r2 = st.columns(2)
-        with btn_r1:
-            new_q = st.button("🎲 Soal Baru", use_container_width=True, type="primary")
-        with btn_r2:
-            cek = st.button("✔ Cek Jawaban", use_container_width=True,
-                            disabled=st.session_state.drill_answered or not st.session_state.drill_coords)
+        # Buttons
+        db1, db2 = st.columns(2)
+        with db1: new_q = st.button("🎲  Soal Baru",  use_container_width=True, key="d_newq")
+        with db2: cek   = st.button("✔  Cek Jawaban", use_container_width=True, key="d_cek",
+                                     disabled=(st.session_state.drill_answered or not st.session_state.drill_coords))
+        hint_btn = st.button("💡  Tampilkan Koordinat", use_container_width=True, key="d_hint")
 
-        hint_btn = st.button("💡 Tampilkan Koordinat", use_container_width=True)
-
-        # Handle new question
+        # New question logic
         if new_q:
             if random.random() < 0.3:
-                x1, y1 = 0, 0
-                x2 = random.choice([i for i in range(-8, 9) if i != 0])
-                y2 = random.randint(-8, 8)
+                gx1, gy1 = 0, 0
+                gx2 = random.choice([i for i in range(-8, 9) if i != 0])
+                gy2 = random.randint(-8, 8)
             else:
-                x1 = random.randint(-7, 7)
-                y1 = random.randint(-7, 7)
-                x2 = random.choice([i for i in range(-7, 8) if i != x1])
-                y2 = random.randint(-7, 7)
-            st.session_state.drill_coords = (x1, y1, x2, y2)
+                gx1 = random.randint(-7, 7); gy1 = random.randint(-7, 7)
+                gx2 = random.choice([i for i in range(-7, 8) if i != gx1])
+                gy2 = random.randint(-7, 7)
+            st.session_state.drill_coords   = (gx1, gy1, gx2, gy2)
             st.session_state.drill_feedback = None
             st.session_state.drill_answered = False
             st.rerun()
 
-        # Handle check answer
+        # Check answer logic
         if cek and st.session_state.drill_coords and not st.session_state.drill_answered:
-            raw = ans_input.strip()
-            valid = True
+            raw    = ans_input.strip()
             user_m = None
             try:
                 if "/" in raw:
-                    n, d = raw.split("/")
-                    user_m = float(n) / float(d)
+                    n, d = raw.split("/"); user_m = float(n) / float(d)
                 elif raw:
                     user_m = float(raw)
-                else:
-                    valid = False
-            except (ValueError, ZeroDivisionError):
-                valid = False
+            except Exception:
+                pass
 
-            if not valid or user_m is None:
-                st.session_state.drill_feedback = {"type": "error", "text": "⚠️ Masukkan angka atau pecahan seperti -1/2"}
+            if user_m is None:
+                st.session_state.drill_feedback = {"type":"error",
+                    "text":"⚠️ Masukkan angka atau pecahan seperti -1/2"}
             else:
-                x1, y1, x2, y2 = st.session_state.drill_coords
-                correct = Fraction(int(round(y2 - y1)), int(round(x2 - x1)))
-                correct_str = fraction_str(y2 - y1, x2 - x1)
+                gx1,gy1,gx2,gy2 = st.session_state.drill_coords
+                correct     = Fraction(int(round(gy2-gy1)), int(round(gx2-gx1)))
+                correct_str = fraction_str(gy2-gy1, gx2-gx1)
                 st.session_state.drill_total += 1
                 if abs(user_m - float(correct)) < 0.0001:
                     st.session_state.drill_score += 1
-                    st.session_state.drill_feedback = {"type": "correct", "text": f"✅ Benar!\n\nm = {correct_str}"}
+                    st.session_state.drill_feedback = {"type":"correct",
+                        "text":f"✅  Benar!\n\nm  =  {correct_str}"}
                 else:
-                    st.session_state.drill_feedback = {"type": "wrong", "text": f"❌ Belum tepat.\n\nJawaban yang benar:\nm = {correct_str}"}
+                    st.session_state.drill_feedback = {"type":"wrong",
+                        "text":f"❌  Belum tepat.\n\nJawaban yang benar:\nm  =  {correct_str}"}
                 st.session_state.drill_answered = True
             st.rerun()
 
-        # Handle hint
-        if hint_btn:
-            if st.session_state.drill_coords:
-                x1, y1, x2, y2 = st.session_state.drill_coords
-                st.session_state.drill_feedback = {
-                    "type": "hint",
-                    "text": f"💡 Petunjuk:\n\nTitik 1 : ({format_num(x1)}, {format_num(y1)})\nTitik 2 : ({format_num(x2)}, {format_num(y2)})"
-                }
-                st.rerun()
+        # Hint logic
+        if hint_btn and st.session_state.drill_coords:
+            gx1,gy1,gx2,gy2 = st.session_state.drill_coords
+            st.session_state.drill_feedback = {"type":"hint",
+                "text":(f"💡  Petunjuk:\n\n"
+                        f"Titik 1 : ({format_num(gx1)}, {format_num(gy1)})\n"
+                        f"Titik 2 : ({format_num(gx2)}, {format_num(gy2)})")}
+            st.rerun()
 
-        # Show feedback
-        if st.session_state.drill_feedback:
-            fb = st.session_state.drill_feedback
-            if fb["type"] == "correct":
-                st.markdown(f'<div class="feedback-correct">{fb["text"].replace(chr(10), "<br>")}</div>', unsafe_allow_html=True)
-            elif fb["type"] == "wrong":
-                st.markdown(f'<div class="feedback-wrong">{fb["text"].replace(chr(10), "<br>")}</div>', unsafe_allow_html=True)
-            elif fb["type"] == "hint":
-                st.markdown(f'<div class="feedback-hint">{fb["text"].replace(chr(10), "<br>")}</div>', unsafe_allow_html=True)
-            elif fb["type"] == "error":
-                st.warning(fb["text"])
+        # Feedback display
+        fb = st.session_state.drill_feedback
+        if fb:
+            txt = fb["text"].replace("\n", "<br>")
+            if   fb["type"] == "correct": st.markdown(f'<div class="fb-correct">{txt}</div>', unsafe_allow_html=True)
+            elif fb["type"] == "wrong":   st.markdown(f'<div class="fb-wrong">{txt}</div>',   unsafe_allow_html=True)
+            elif fb["type"] == "hint":    st.markdown(f'<div class="fb-hint">{txt}</div>',    unsafe_allow_html=True)
+            elif fb["type"] == "error":   st.warning(fb["text"])
 
-    with left:
+    with graph_col:
+        st.markdown("**Grafik Soal**")
         if st.session_state.drill_coords:
-            x1, y1, x2, y2 = st.session_state.drill_coords
-            m_val = (y2 - y1) / (x2 - x1)
-            color = "#06D6A0" if m_val > 0 else ("#EF233C" if m_val < 0 else "#4361EE")
-            fig = draw_graph(x1, y1, x2, y2, color, title="Tentukan Gradien Garis Ini!")
+            gx1,gy1,gx2,gy2 = st.session_state.drill_coords
+            m_val  = (gy2-gy1)/(gx2-gx1)
+            gcolor = "#06D6A0" if m_val > 0 else ("#EF233C" if m_val < 0 else "#4361EE")
+            fig = make_graph(gx1,gy1,gx2,gy2,gcolor,"Tentukan Gradien Garis Ini!")
         else:
-            fig, ax = plt.subplots(figsize=(7, 6))
-            fig.patch.set_facecolor("#FAFBFF")
-            ax.set_facecolor("#F0F4FF")
-            ax.axhline(0, color="#94A3B8", linewidth=1.2)
-            ax.axvline(0, color="#94A3B8", linewidth=1.2)
-            ax.grid(True, linestyle="--", linewidth=0.6, color="#CBD5E1", alpha=0.8)
-            ax.set_xlim(-10, 10)
-            ax.set_ylim(-10, 10)
-            ax.set_title("Klik 'Soal Baru' untuk mulai!", fontsize=14,
-                         fontweight="bold", color="#64748B", pad=12)
-            fig.tight_layout()
+            fig = make_empty_graph("Klik 'Soal Baru' untuk mulai!")
         st.pyplot(fig, use_container_width=True)
         plt.close(fig)
 
-# ═══════════════════════════════════════════════
-#  MODE: REVIEW MATERI
-# ═══════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════
+#  REVIEW MATERI  ← pakai st.markdown native, BUKAN unsafe HTML untuk konten
+# ═══════════════════════════════════════════════════════
 elif st.session_state.mode == "review":
+
+    st.markdown('<div class="review-banner">📚  REVIEW MATERI — GRADIEN GARIS LURUS</div>',
+                unsafe_allow_html=True)
+
+    # ── SECTION 1 ──────────────────────────────────────
+    st.markdown('<div class="sec-card sec-card-green">', unsafe_allow_html=True)
+    st.markdown('<div class="sec-num-title"><span class="sec-num">1️⃣</span>'
+                '<span class="sec-title" style="color:#16A34A;">GRADIEN MELALUI TITIK PUSAT</span></div>',
+                unsafe_allow_html=True)
+
+    st.markdown("**Gradien Garis Melalui Titik Pusat (0,0) dan Titik (x,y)**")
+    st.markdown("**📐 Rumus:**")
+    st.markdown('<div class="formula-box" style="background:#C8F7DC;color:#065F46;">m &nbsp;=&nbsp; y / x &nbsp;&nbsp;&nbsp;&nbsp;(dengan syarat x ≠ 0)</div>',
+                unsafe_allow_html=True)
+    st.markdown("**⚠️ Catatan Penting:**")
+    st.markdown("- Jika **x = 0** (garis vertikal) → gradien **TIDAK TERDEFINISI**\n- Jika **y = 0** (garis horizontal) → gradien **m = 0**")
+    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
+
+    st.markdown('<p class="contoh-label" style="color:#16A34A;">📝 CONTOH 1 — Gradien Positif</p>',
+                unsafe_allow_html=True)
+    st.markdown("**Soal:** Tentukan gradien persamaan garis lurus yang melalui titik pusat koordinat dan titik (4, 8)!")
+    st.markdown("**Penyelesaian:**  \nPersamaan garis lurus melalui titik (0,0) dan (4,8), sehingga gradiennya adalah:")
+    st.markdown('<div class="formula-box" style="background:#C8F7DC;color:#065F46;">m &nbsp;=&nbsp; y/x &nbsp;=&nbsp; 8/4 &nbsp;=&nbsp; 2</div>',
+                unsafe_allow_html=True)
+    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Didapatkan gradien positif (m = 2), artinya garis <strong>NAIK</strong> dari kiri ke kanan.</div>',
+                unsafe_allow_html=True)
+    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
+
+    st.markdown('<p class="contoh-label" style="color:#16A34A;">📝 CONTOH 2 — Gradien Negatif</p>',
+                unsafe_allow_html=True)
+    st.markdown("**Soal:** Tentukan gradien persamaan garis lurus yang melalui titik pusat koordinat dan titik (6, −3)!")
+    st.markdown("**Penyelesaian:**  \nPersamaan garis lurus melalui titik (0,0) dan (6,−3), sehingga gradiennya adalah:")
+    st.markdown('<div class="formula-box" style="background:#C8F7DC;color:#065F46;">m &nbsp;=&nbsp; y/x &nbsp;=&nbsp; −3/6 &nbsp;=&nbsp; −1/2</div>',
+                unsafe_allow_html=True)
+    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Didapatkan gradien negatif (m = −1/2), artinya garis <strong>TURUN</strong> dari kiri ke kanan, seperti jalan menurun.</div>',
+                unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # ── SECTION 2 ──────────────────────────────────────
+    st.markdown('<div class="sec-card sec-card-orange">', unsafe_allow_html=True)
+    st.markdown('<div class="sec-num-title"><span class="sec-num">2️⃣</span>'
+                '<span class="sec-title" style="color:#EA580C;">GRADIEN MELALUI DUA TITIK</span></div>',
+                unsafe_allow_html=True)
+
+    st.markdown("**Gradien Garis Melalui Dua Titik (x₁,y₁) dan (x₂,y₂)**")
+    st.markdown("**📐 Rumus:**")
+    st.markdown('<div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">m &nbsp;=&nbsp; (y₂ − y₁) / (x₂ − x₁) &nbsp;&nbsp;&nbsp;&nbsp;(dengan syarat x₁ ≠ x₂)</div>',
+                unsafe_allow_html=True)
+    st.markdown("**⚠️ Catatan Penting:**")
+    st.markdown("- Jika **x₁ = x₂** (garis vertikal) → gradien **TIDAK TERDEFINISI**")
+    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
+
+    st.markdown('<p class="contoh-label" style="color:#EA580C;">📝 CONTOH 1 — Gradien Tidak Terdefinisi</p>',
+                unsafe_allow_html=True)
+    st.markdown("**Soal:** Tentukan gradien garis yang melalui P(3,1) dan Q(3,5)!")
+    st.markdown("**Penyelesaian:**  \nTitik P(3,1) → x₁ = 3 dan y₁ = 1  \nTitik Q(3,5) → x₂ = 3 dan y₂ = 5  \nGradien garis PQ sebagai berikut:")
+    st.markdown('<div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">m &nbsp;=&nbsp; (5 − 1)/(3 − 3) &nbsp;=&nbsp; 4/0</div>',
+                unsafe_allow_html=True)
+    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Karena penyebut = 0, maka gradien <strong>TIDAK TERDEFINISI</strong> dan berupa <strong>GARIS VERTIKAL</strong>.</div>',
+                unsafe_allow_html=True)
+    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
+
+    st.markdown('<p class="contoh-label" style="color:#EA580C;">📝 CONTOH 2 — Gradien Negatif</p>',
+                unsafe_allow_html=True)
+    st.markdown("**Soal:** Tentukan gradien garis yang melalui P(1,4) dan Q(5,2)!")
+    st.markdown("**Penyelesaian:**  \nTitik P(1,4) → x₁ = 1 dan y₁ = 4  \nTitik Q(5,2) → x₂ = 5 dan y₂ = 2  \nGradien garis PQ sebagai berikut:")
+    st.markdown('<div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">m &nbsp;=&nbsp; (2 − 4)/(5 − 1) &nbsp;=&nbsp; −2/4 &nbsp;=&nbsp; −1/2</div>',
+                unsafe_allow_html=True)
+    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Gradien garis PQ adalah −1/2. Garis <strong>TURUN</strong> dari kiri ke kanan.</div>',
+                unsafe_allow_html=True)
+    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
+
+    st.markdown('<p class="contoh-label" style="color:#EA580C;">📝 CONTOH 3 — Gradien Nol</p>',
+                unsafe_allow_html=True)
+    st.markdown("**Soal:** Tentukan gradien garis yang melalui P(2,3) dan Q(7,3)!")
+    st.markdown("**Penyelesaian:**  \nTitik P(2,3) → x₁ = 2 dan y₁ = 3  \nTitik Q(7,3) → x₂ = 7 dan y₂ = 3  \nGradien garis PQ sebagai berikut:")
+    st.markdown('<div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">m &nbsp;=&nbsp; (3 − 3)/(7 − 2) &nbsp;=&nbsp; 0/5 &nbsp;=&nbsp; 0</div>',
+                unsafe_allow_html=True)
+    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Gradien garis PQ adalah 0. Berupa <strong>GARIS HORIZONTAL</strong>.</div>',
+                unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # ── SECTION 3 ──────────────────────────────────────
+    st.markdown('<div class="sec-card sec-card-purple">', unsafe_allow_html=True)
+    st.markdown('<div class="sec-num-title"><span class="sec-num">3️⃣</span>'
+                '<span class="sec-title" style="color:#9333EA;">INTERPRETASI &amp; TIPS</span></div>',
+                unsafe_allow_html=True)
+
+    st.markdown("**📊 Interpretasi Nilai Gradien (m):**")
     st.markdown("""
-    <div class="review-header">
-        <h2>📚 REVIEW MATERI - GRADIEN GARIS LURUS</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ── SECTION 1 ──────────────────────────────
+| Nilai m | Jenis Garis | Keterangan |
+|---------|-------------|------------|
+| m > 0 | ↗ Naik | Gradien positif |
+| m < 0 | ↘ Turun | Gradien negatif |
+| m = 0 | → Horizontal | Sejajar sumbu x |
+| m tak terdefinisi | ↕ Vertikal | Sejajar sumbu y |
+""")
+    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
+    st.markdown("**💡 Tips Penting:**")
     st.markdown("""
-    <div class="card-green">
-        <p class="section-title" style="color:#16A34A;">1️⃣ &nbsp; GRADIEN MELALUI TITIK PUSAT</p>
-        <p style="font-weight:700; color:#1E293B;">GRADIEN GARIS MELALUI TITIK PUSAT (0,0) DAN TITIK (x,y)</p>
+1. Semakin besar nilai **|m|**, semakin **CURAM** garisnya
+2. Dua garis **sejajar** memiliki gradien yang **SAMA**
+3. Dua garis **tegak lurus**: m₁ × m₂ = −1
+4. Garis **horizontal** → gradien selalu = 0
+5. Garis **vertikal** → gradien tidak terdefinisi
+""")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-        <p><strong>📐 Rumus:</strong></p>
-        <div class="formula-box" style="background:#D1FAE5; color:#065F46;">m = y/x &nbsp;&nbsp;&nbsp; (dengan syarat x ≠ 0)</div>
-
-        <p><strong>⚠️ Catatan Penting:</strong></p>
-        <p>• Jika x = 0 (garis vertikal) → gradien <strong>TIDAK TERDEFINISI</strong><br>
-           • Jika y = 0 (garis horizontal) → gradien m = 0</p>
-
-        <hr class="review-divider">
-
-        <p><strong>📝 CONTOH 1: Gradien Positif</strong></p>
-        <p>Tentukan gradien persamaan garis lurus yang melalui titik pusat koordinat dan titik (4, 8)!</p>
-        <p><em>Penyelesaian:</em><br>
-        Persamaan garis lurus melalui titik (0,0) dan (4,8), sehingga gradiennya adalah:</p>
-        <div class="formula-box" style="background:#D1FAE5; color:#065F46;">m = y/x = 8/4 = 2</div>
-        <p>✅ <strong>Kesimpulan:</strong><br>
-        Didapatkan gradien positif (m = 2), artinya garis <strong>NAIK</strong> dari kiri ke kanan.</p>
-
-        <hr class="review-divider">
-
-        <p><strong>📝 CONTOH 2: Gradien Negatif</strong></p>
-        <p>Tentukan gradien persamaan garis lurus yang melalui titik pusat koordinat dan titik (6, −3)!</p>
-        <p><em>Penyelesaian:</em><br>
-        Persamaan garis lurus melalui titik (0,0) dan (6,−3), sehingga gradiennya adalah:</p>
-        <div class="formula-box" style="background:#D1FAE5; color:#065F46;">m = y/x = -3/6 = -1/2</div>
-        <p>✅ <strong>Kesimpulan:</strong><br>
-        Didapatkan gradien negatif (m = −1/2), artinya garis <strong>TURUN</strong> dari kiri ke kanan, seperti jalan menurun.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ── SECTION 2 ──────────────────────────────
+    # Info banner
     st.markdown("""
-    <div class="card-orange">
-        <p class="section-title" style="color:#EA580C;">2️⃣ &nbsp; GRADIEN MELALUI DUA TITIK</p>
-        <p style="font-weight:700; color:#1E293B;">GRADIEN GARIS MELALUI DUA TITIK (x₁,y₁) DAN (x₂,y₂)</p>
-
-        <p><strong>📐 Rumus:</strong></p>
-        <div class="formula-box" style="background:#FED7AA; color:#7C2D12;">m = (y₂ - y₁) / (x₂ - x₁) &nbsp;&nbsp;&nbsp; (dengan syarat x₁ ≠ x₂)</div>
-
-        <p><strong>⚠️ Catatan Penting:</strong></p>
-        <p>• Jika x₁ = x₂ (garis vertikal) → gradien <strong>TIDAK TERDEFINISI</strong></p>
-
-        <hr class="review-divider">
-
-        <p><strong>📝 CONTOH 1: Gradien Tidak Terdefinisi</strong></p>
-        <p>Tentukan gradien garis yang melalui P(3,1) dan Q(3,5)!</p>
-        <p><em>Penyelesaian:</em><br>
-        Titik P(3,1) → x₁ = 3 dan y₁ = 1<br>
-        Titik Q(3,5) → x₂ = 3 dan y₂ = 5<br><br>
-        Gradien garis PQ sebagai berikut:</p>
-        <div class="formula-box" style="background:#FED7AA; color:#7C2D12;">m = (y₂ - y₁)/(x₂ - x₁) = (5 - 1)/(3 - 3) = 4/0</div>
-        <p>✅ <strong>Kesimpulan:</strong><br>
-        Diperoleh x₁ dan x₂ = 0. Karena penyebut = 0, maka gradien <strong>TIDAK TERDEFINISI</strong> dan berupa <strong>GARIS VERTIKAL</strong>.</p>
-
-        <hr class="review-divider">
-
-        <p><strong>📝 CONTOH 2: Gradien Negatif</strong></p>
-        <p>Tentukan gradien garis yang melalui P(1,4) dan Q(5,2)!</p>
-        <p><em>Penyelesaian:</em><br>
-        Titik P(1,4) → x₁ = 1 dan y₁ = 4<br>
-        Titik Q(5,2) → x₂ = 5 dan y₂ = 2<br><br>
-        Gradien garis PQ sebagai berikut:</p>
-        <div class="formula-box" style="background:#FED7AA; color:#7C2D12;">m = (y₂ - y₁)/(x₂ - x₁) = (2 - 4)/(5 - 1) = -2/4 = -1/2</div>
-        <p>✅ <strong>Kesimpulan:</strong><br>
-        Jadi, gradien garis PQ adalah −1/2. Didapatkan gradien negatif, artinya garis <strong>TURUN</strong> dari kiri ke kanan.</p>
-
-        <hr class="review-divider">
-
-        <p><strong>📝 CONTOH 3: Gradien Nol</strong></p>
-        <p>Tentukan gradien garis yang melalui P(2,3) dan Q(7,3)!</p>
-        <p><em>Penyelesaian:</em><br>
-        Titik P(2,3) → x₁ = 2 dan y₁ = 3<br>
-        Titik Q(7,3) → x₂ = 7 dan y₂ = 3<br><br>
-        Gradien garis PQ sebagai berikut:</p>
-        <div class="formula-box" style="background:#FED7AA; color:#7C2D12;">m = (y₂ - y₁)/(x₂ - x₁) = (3 - 3)/(7 - 2) = 0/5 = 0</div>
-        <p>✅ <strong>Kesimpulan:</strong><br>
-        Jadi, gradien garis PQ adalah 0. Didapatkan gradien 0 dan berupa <strong>GARIS HORIZONTAL</strong>.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ── SECTION 3 ──────────────────────────────
-    st.markdown("""
-    <div class="card-purple">
-        <p class="section-title" style="color:#9333EA;">3️⃣ &nbsp; INTERPRETASI &amp; TIPS</p>
-        <p style="font-weight:700; color:#1E293B;">INTERPRETASI NILAI GRADIEN</p>
-
-        <p><strong>📊 Berdasarkan Nilai m:</strong></p>
-        <p>
-        • <strong>m &gt; 0</strong> &nbsp;→&nbsp; Garis <strong>NAIK</strong> dari kiri ke kanan (gradien POSITIF)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<em>Contoh: m = 2, m = 1/2, m = 5</em><br><br>
-        • <strong>m &lt; 0</strong> &nbsp;→&nbsp; Garis <strong>TURUN</strong> dari kiri ke kanan (gradien NEGATIF)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<em>Contoh: m = -2, m = -1/2, m = -5</em><br><br>
-        • <strong>m = 0</strong> &nbsp;→&nbsp; Garis <strong>HORIZONTAL</strong> (sejajar sumbu x)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<em>Contoh: garis y = 3, y = -2</em><br><br>
-        • <strong>m tidak terdefinisi</strong> &nbsp;→&nbsp; Garis <strong>VERTIKAL</strong> (sejajar sumbu y)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<em>Contoh: garis x = 2, x = -5</em>
-        </p>
-
-        <hr class="review-divider">
-
-        <p><strong>💡 TIPS PENTING:</strong></p>
-        <p>
-        1. Semakin besar nilai |m|, semakin <strong>CURAM</strong> garisnya<br>
-        2. Dua garis sejajar memiliki gradien yang <strong>SAMA</strong><br>
-        3. Dua garis tegak lurus: m₁ × m₂ = −1<br>
-        4. Untuk garis horizontal: gradien selalu 0<br>
-        5. Untuk garis vertikal: gradien tidak terdefinisi
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ── Bottom tip ──────────────────────────────
-    st.markdown("""
-    <div class="info-tip">
+    <div class="info-banner">
         💡 Gunakan <strong>Mode Visualizer</strong> untuk melihat grafik dan perhitungan langkah demi langkah!<br>
         🎯 Gunakan <strong>Mode Drill Practice</strong> untuk berlatih mengerjakan soal!
-    </div>
-    """, unsafe_allow_html=True)
+    </div>""", unsafe_allow_html=True)
+
 
 # ─────────────────────────────────────────────
 #  FOOTER
 # ─────────────────────────────────────────────
 st.markdown("""
-<div style="text-align:center; margin-top:40px; padding:20px; color:#94A3B8; font-size:0.85rem;">
+<div style="text-align:center;margin-top:40px;padding:20px;color:#94A3B8;font-size:0.85rem;">
     📐 Gradien Visualizer &nbsp;·&nbsp; Media Pembelajaran Matematika SMP Kelas VIII<br>
     Dibuat oleh <strong>Yustika Berlian Cindy Aprillia</strong> &nbsp;·&nbsp; SMP Negeri 2 Lawang
 </div>
