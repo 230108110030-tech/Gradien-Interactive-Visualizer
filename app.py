@@ -705,109 +705,190 @@ elif st.session_state.mode == "review":
     st.markdown('<div class="review-banner">📚  REVIEW MATERI — GRADIEN GARIS LURUS</div>',
                 unsafe_allow_html=True)
 
-    # ── SECTION 1 ──────────────────────────────────────
-    st.markdown('<div class="sec-card sec-card-green">', unsafe_allow_html=True)
-    st.markdown('<div class="sec-num-title"><span class="sec-num">1️⃣</span>'
-                '<span class="sec-title" style="color:#16A34A;">GRADIEN MELALUI TITIK PUSAT</span></div>',
-                unsafe_allow_html=True)
-
-    st.markdown("**Gradien Garis Melalui Titik Pusat (0,0) dan Titik (x,y)**")
-    st.markdown("**📐 Rumus:**")
-    st.markdown('<div class="formula-box" style="background:#C8F7DC;color:#065F46;">m &nbsp;=&nbsp; y / x &nbsp;&nbsp;&nbsp;&nbsp;(dengan syarat x ≠ 0)</div>',
-                unsafe_allow_html=True)
-    st.markdown("**⚠️ Catatan Penting:**")
-    st.markdown("- Jika **x = 0** (garis vertikal) → gradien **TIDAK TERDEFINISI**\n- Jika **y = 0** (garis horizontal) → gradien **m = 0**")
-    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
-
-    st.markdown('<p class="contoh-label" style="color:#16A34A;">📝 CONTOH 1 — Gradien Positif</p>',
-                unsafe_allow_html=True)
-    st.markdown("**Soal:** Tentukan gradien persamaan garis lurus yang melalui titik pusat koordinat dan titik (4, 8)!")
-    st.markdown("**Penyelesaian:**  \nPersamaan garis lurus melalui titik (0,0) dan (4,8), sehingga gradiennya adalah:")
-    st.markdown('<div class="formula-box" style="background:#C8F7DC;color:#065F46;">m &nbsp;=&nbsp; y/x &nbsp;=&nbsp; 8/4 &nbsp;=&nbsp; 2</div>',
-                unsafe_allow_html=True)
-    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Didapatkan gradien positif (m = 2), artinya garis <strong>NAIK</strong> dari kiri ke kanan.</div>',
-                unsafe_allow_html=True)
-    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
-
-    st.markdown('<p class="contoh-label" style="color:#16A34A;">📝 CONTOH 2 — Gradien Negatif</p>',
-                unsafe_allow_html=True)
-    st.markdown("**Soal:** Tentukan gradien persamaan garis lurus yang melalui titik pusat koordinat dan titik (6, −3)!")
-    st.markdown("**Penyelesaian:**  \nPersamaan garis lurus melalui titik (0,0) dan (6,−3), sehingga gradiennya adalah:")
-    st.markdown('<div class="formula-box" style="background:#C8F7DC;color:#065F46;">m &nbsp;=&nbsp; y/x &nbsp;=&nbsp; −3/6 &nbsp;=&nbsp; −1/2</div>',
-                unsafe_allow_html=True)
-    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Didapatkan gradien negatif (m = −1/2), artinya garis <strong>TURUN</strong> dari kiri ke kanan, seperti jalan menurun.</div>',
-                unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # ── SECTION 2 ──────────────────────────────────────
-    st.markdown('<div class="sec-card sec-card-orange">', unsafe_allow_html=True)
-    st.markdown('<div class="sec-num-title"><span class="sec-num">2️⃣</span>'
-                '<span class="sec-title" style="color:#EA580C;">GRADIEN MELALUI DUA TITIK</span></div>',
-                unsafe_allow_html=True)
-
-    st.markdown("**Gradien Garis Melalui Dua Titik (x₁,y₁) dan (x₂,y₂)**")
-    st.markdown("**📐 Rumus:**")
-    st.markdown('<div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">m &nbsp;=&nbsp; (y₂ − y₁) / (x₂ − x₁) &nbsp;&nbsp;&nbsp;&nbsp;(dengan syarat x₁ ≠ x₂)</div>',
-                unsafe_allow_html=True)
-    st.markdown("**⚠️ Catatan Penting:**")
-    st.markdown("- Jika **x₁ = x₂** (garis vertikal) → gradien **TIDAK TERDEFINISI**")
-    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
-
-    st.markdown('<p class="contoh-label" style="color:#EA580C;">📝 CONTOH 1 — Gradien Tidak Terdefinisi</p>',
-                unsafe_allow_html=True)
-    st.markdown("**Soal:** Tentukan gradien garis yang melalui P(3,1) dan Q(3,5)!")
-    st.markdown("**Penyelesaian:**  \nTitik P(3,1) → x₁ = 3 dan y₁ = 1  \nTitik Q(3,5) → x₂ = 3 dan y₂ = 5  \nGradien garis PQ sebagai berikut:")
-    st.markdown('<div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">m &nbsp;=&nbsp; (5 − 1)/(3 − 3) &nbsp;=&nbsp; 4/0</div>',
-                unsafe_allow_html=True)
-    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Karena penyebut = 0, maka gradien <strong>TIDAK TERDEFINISI</strong> dan berupa <strong>GARIS VERTIKAL</strong>.</div>',
-                unsafe_allow_html=True)
-    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
-
-    st.markdown('<p class="contoh-label" style="color:#EA580C;">📝 CONTOH 2 — Gradien Negatif</p>',
-                unsafe_allow_html=True)
-    st.markdown("**Soal:** Tentukan gradien garis yang melalui P(1,4) dan Q(5,2)!")
-    st.markdown("**Penyelesaian:**  \nTitik P(1,4) → x₁ = 1 dan y₁ = 4  \nTitik Q(5,2) → x₂ = 5 dan y₂ = 2  \nGradien garis PQ sebagai berikut:")
-    st.markdown('<div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">m &nbsp;=&nbsp; (2 − 4)/(5 − 1) &nbsp;=&nbsp; −2/4 &nbsp;=&nbsp; −1/2</div>',
-                unsafe_allow_html=True)
-    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Gradien garis PQ adalah −1/2. Garis <strong>TURUN</strong> dari kiri ke kanan.</div>',
-                unsafe_allow_html=True)
-    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
-
-    st.markdown('<p class="contoh-label" style="color:#EA580C;">📝 CONTOH 3 — Gradien Nol</p>',
-                unsafe_allow_html=True)
-    st.markdown("**Soal:** Tentukan gradien garis yang melalui P(2,3) dan Q(7,3)!")
-    st.markdown("**Penyelesaian:**  \nTitik P(2,3) → x₁ = 2 dan y₁ = 3  \nTitik Q(7,3) → x₂ = 7 dan y₂ = 3  \nGradien garis PQ sebagai berikut:")
-    st.markdown('<div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">m &nbsp;=&nbsp; (3 − 3)/(7 − 2) &nbsp;=&nbsp; 0/5 &nbsp;=&nbsp; 0</div>',
-                unsafe_allow_html=True)
-    st.markdown('<div class="kesimpulan-box">✅ <strong>Kesimpulan:</strong> Gradien garis PQ adalah 0. Berupa <strong>GARIS HORIZONTAL</strong>.</div>',
-                unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # ── SECTION 3 ──────────────────────────────────────
-    st.markdown('<div class="sec-card sec-card-purple">', unsafe_allow_html=True)
-    st.markdown('<div class="sec-num-title"><span class="sec-num">3️⃣</span>'
-                '<span class="sec-title" style="color:#9333EA;">INTERPRETASI &amp; TIPS</span></div>',
-                unsafe_allow_html=True)
-
-    st.markdown("**📊 Interpretasi Nilai Gradien (m):**")
+    # ── SECTION 1 ── satu blok HTML lengkap ─────────────
     st.markdown("""
-| Nilai m | Jenis Garis | Keterangan |
-|---------|-------------|------------|
-| m > 0 | ↗ Naik | Gradien positif |
-| m < 0 | ↘ Turun | Gradien negatif |
-| m = 0 | → Horizontal | Sejajar sumbu x |
-| m tak terdefinisi | ↕ Vertikal | Sejajar sumbu y |
-""")
-    st.markdown('<hr class="sec-divider">', unsafe_allow_html=True)
-    st.markdown("**💡 Tips Penting:**")
+    <div class="sec-card sec-card-green">
+
+        <div class="sec-num-title">
+            <span class="sec-num">1️⃣</span>
+            <span class="sec-title" style="color:#16A34A;">GRADIEN MELALUI TITIK PUSAT</span>
+        </div>
+
+        <p style="font-weight:700;margin:0 0 10px 0;">
+            Gradien Garis Melalui Titik Pusat (0,0) dan Titik (x,y)
+        </p>
+
+        <p><strong>📐 Rumus:</strong></p>
+        <div class="formula-box" style="background:#C8F7DC;color:#065F46;margin-bottom:14px;">
+            m &nbsp;=&nbsp; y / x &nbsp;&nbsp;&nbsp;&nbsp;(dengan syarat x ≠ 0)
+        </div>
+
+        <p><strong>⚠️ Catatan Penting:</strong></p>
+        <ul style="line-height:2;margin:4px 0 0 0;">
+            <li>Jika <strong>x = 0</strong> (garis vertikal) → gradien <strong>TIDAK TERDEFINISI</strong></li>
+            <li>Jika <strong>y = 0</strong> (garis horizontal) → gradien <strong>m = 0</strong></li>
+        </ul>
+
+        <hr class="sec-divider">
+
+        <p class="contoh-label" style="color:#16A34A;">📝 CONTOH 1 — Gradien Positif</p>
+        <p><strong>Soal:</strong> Tentukan gradien persamaan garis lurus yang melalui titik pusat koordinat dan titik (4, 8)!</p>
+        <p><strong>Penyelesaian:</strong><br>
+        Persamaan garis lurus melalui titik (0,0) dan (4,8), sehingga gradiennya adalah:</p>
+        <div class="formula-box" style="background:#C8F7DC;color:#065F46;">
+            m &nbsp;=&nbsp; y/x &nbsp;=&nbsp; 8/4 &nbsp;=&nbsp; 2
+        </div>
+        <div class="kesimpulan-box" style="margin-top:10px;">
+            ✅ <strong>Kesimpulan:</strong> Didapatkan gradien positif (m = 2),
+            artinya garis <strong>NAIK</strong> dari kiri ke kanan.
+        </div>
+
+        <hr class="sec-divider">
+
+        <p class="contoh-label" style="color:#16A34A;">📝 CONTOH 2 — Gradien Negatif</p>
+        <p><strong>Soal:</strong> Tentukan gradien persamaan garis lurus yang melalui titik pusat koordinat dan titik (6, −3)!</p>
+        <p><strong>Penyelesaian:</strong><br>
+        Persamaan garis lurus melalui titik (0,0) dan (6,−3), sehingga gradiennya adalah:</p>
+        <div class="formula-box" style="background:#C8F7DC;color:#065F46;">
+            m &nbsp;=&nbsp; y/x &nbsp;=&nbsp; −3/6 &nbsp;=&nbsp; −1/2
+        </div>
+        <div class="kesimpulan-box" style="margin-top:10px;">
+            ✅ <strong>Kesimpulan:</strong> Didapatkan gradien negatif (m = −1/2),
+            artinya garis <strong>TURUN</strong> dari kiri ke kanan, seperti jalan menurun.
+        </div>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── SECTION 2 ── satu blok HTML lengkap ─────────────
     st.markdown("""
-1. Semakin besar nilai **|m|**, semakin **CURAM** garisnya
-2. Dua garis **sejajar** memiliki gradien yang **SAMA**
-3. Dua garis **tegak lurus**: m₁ × m₂ = −1
-4. Garis **horizontal** → gradien selalu = 0
-5. Garis **vertikal** → gradien tidak terdefinisi
-""")
-    st.markdown('</div>', unsafe_allow_html=True)
+    <div class="sec-card sec-card-orange">
+
+        <div class="sec-num-title">
+            <span class="sec-num">2️⃣</span>
+            <span class="sec-title" style="color:#EA580C;">GRADIEN MELALUI DUA TITIK</span>
+        </div>
+
+        <p style="font-weight:700;margin:0 0 10px 0;">
+            Gradien Garis Melalui Dua Titik (x₁,y₁) dan (x₂,y₂)
+        </p>
+
+        <p><strong>📐 Rumus:</strong></p>
+        <div class="formula-box" style="background:#FDDCB5;color:#7C2D12;margin-bottom:14px;">
+            m &nbsp;=&nbsp; (y₂ − y₁) / (x₂ − x₁) &nbsp;&nbsp;&nbsp;&nbsp;(dengan syarat x₁ ≠ x₂)
+        </div>
+
+        <p><strong>⚠️ Catatan Penting:</strong></p>
+        <ul style="line-height:2;margin:4px 0 0 0;">
+            <li>Jika <strong>x₁ = x₂</strong> (garis vertikal) → gradien <strong>TIDAK TERDEFINISI</strong></li>
+        </ul>
+
+        <hr class="sec-divider">
+
+        <p class="contoh-label" style="color:#EA580C;">📝 CONTOH 1 — Gradien Tidak Terdefinisi</p>
+        <p><strong>Soal:</strong> Tentukan gradien garis yang melalui P(3,1) dan Q(3,5)!</p>
+        <p><strong>Penyelesaian:</strong><br>
+        Titik P(3,1) → x₁ = 3 dan y₁ = 1<br>
+        Titik Q(3,5) → x₂ = 3 dan y₂ = 5<br>
+        Gradien garis PQ sebagai berikut:</p>
+        <div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">
+            m &nbsp;=&nbsp; (5 − 1)/(3 − 3) &nbsp;=&nbsp; 4/0
+        </div>
+        <div class="kesimpulan-box" style="margin-top:10px;">
+            ✅ <strong>Kesimpulan:</strong> Karena penyebut = 0, maka gradien
+            <strong>TIDAK TERDEFINISI</strong> dan berupa <strong>GARIS VERTIKAL</strong>.
+        </div>
+
+        <hr class="sec-divider">
+
+        <p class="contoh-label" style="color:#EA580C;">📝 CONTOH 2 — Gradien Negatif</p>
+        <p><strong>Soal:</strong> Tentukan gradien garis yang melalui P(1,4) dan Q(5,2)!</p>
+        <p><strong>Penyelesaian:</strong><br>
+        Titik P(1,4) → x₁ = 1 dan y₁ = 4<br>
+        Titik Q(5,2) → x₂ = 5 dan y₂ = 2<br>
+        Gradien garis PQ sebagai berikut:</p>
+        <div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">
+            m &nbsp;=&nbsp; (2 − 4)/(5 − 1) &nbsp;=&nbsp; −2/4 &nbsp;=&nbsp; −1/2
+        </div>
+        <div class="kesimpulan-box" style="margin-top:10px;">
+            ✅ <strong>Kesimpulan:</strong> Gradien garis PQ adalah −1/2.
+            Garis <strong>TURUN</strong> dari kiri ke kanan.
+        </div>
+
+        <hr class="sec-divider">
+
+        <p class="contoh-label" style="color:#EA580C;">📝 CONTOH 3 — Gradien Nol</p>
+        <p><strong>Soal:</strong> Tentukan gradien garis yang melalui P(2,3) dan Q(7,3)!</p>
+        <p><strong>Penyelesaian:</strong><br>
+        Titik P(2,3) → x₁ = 2 dan y₁ = 3<br>
+        Titik Q(7,3) → x₂ = 7 dan y₂ = 3<br>
+        Gradien garis PQ sebagai berikut:</p>
+        <div class="formula-box" style="background:#FDDCB5;color:#7C2D12;">
+            m &nbsp;=&nbsp; (3 − 3)/(7 − 2) &nbsp;=&nbsp; 0/5 &nbsp;=&nbsp; 0
+        </div>
+        <div class="kesimpulan-box" style="margin-top:10px;">
+            ✅ <strong>Kesimpulan:</strong> Gradien garis PQ adalah 0.
+            Berupa <strong>GARIS HORIZONTAL</strong>.
+        </div>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── SECTION 3 ── satu blok HTML lengkap ─────────────
+    st.markdown("""
+    <div class="sec-card sec-card-purple">
+
+        <div class="sec-num-title">
+            <span class="sec-num">3️⃣</span>
+            <span class="sec-title" style="color:#9333EA;">INTERPRETASI &amp; TIPS</span>
+        </div>
+
+        <p><strong>📊 Interpretasi Nilai Gradien (m):</strong></p>
+        <table style="width:100%;border-collapse:collapse;margin:8px 0 16px 0;font-size:0.95rem;">
+            <thead>
+                <tr style="background:#E9D5FF;">
+                    <th style="padding:10px 14px;text-align:left;border-radius:6px 0 0 0;">Nilai m</th>
+                    <th style="padding:10px 14px;text-align:left;">Jenis Garis</th>
+                    <th style="padding:10px 14px;text-align:left;border-radius:0 6px 0 0;">Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background:rgba(255,255,255,0.5);">
+                    <td style="padding:9px 14px;"><strong>m &gt; 0</strong></td>
+                    <td style="padding:9px 14px;">↗ Naik</td>
+                    <td style="padding:9px 14px;">Gradien positif</td>
+                </tr>
+                <tr style="background:rgba(255,255,255,0.25);">
+                    <td style="padding:9px 14px;"><strong>m &lt; 0</strong></td>
+                    <td style="padding:9px 14px;">↘ Turun</td>
+                    <td style="padding:9px 14px;">Gradien negatif</td>
+                </tr>
+                <tr style="background:rgba(255,255,255,0.5);">
+                    <td style="padding:9px 14px;"><strong>m = 0</strong></td>
+                    <td style="padding:9px 14px;">→ Horizontal</td>
+                    <td style="padding:9px 14px;">Sejajar sumbu x</td>
+                </tr>
+                <tr style="background:rgba(255,255,255,0.25);">
+                    <td style="padding:9px 14px;"><strong>m tak terdefinisi</strong></td>
+                    <td style="padding:9px 14px;">↕ Vertikal</td>
+                    <td style="padding:9px 14px;">Sejajar sumbu y</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr class="sec-divider">
+
+        <p><strong>💡 Tips Penting:</strong></p>
+        <ol style="line-height:2.1;margin:6px 0 0 0;">
+            <li>Semakin besar nilai <strong>|m|</strong>, semakin <strong>CURAM</strong> garisnya</li>
+            <li>Dua garis <strong>sejajar</strong> memiliki gradien yang <strong>SAMA</strong></li>
+            <li>Dua garis <strong>tegak lurus</strong>: m₁ × m₂ = −1</li>
+            <li>Garis <strong>horizontal</strong> → gradien selalu = 0</li>
+            <li>Garis <strong>vertikal</strong> → gradien tidak terdefinisi</li>
+        </ol>
+
+    </div>
+    """, unsafe_allow_html=True)
 
     # Info banner
     st.markdown("""
