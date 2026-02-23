@@ -472,7 +472,6 @@ if st.session_state.mode == "visualizer":
     left_col, right_col = st.columns([1.05, 1.6], gap="large")
 
     with left_col:
-        st.markdown('<div class="panel-card">', unsafe_allow_html=True)
         st.markdown("### 🗂️ Input Koordinat")
         st.caption("Masukkan koordinat dua titik untuk menentukan gradien.")
         st.markdown("---")
@@ -481,16 +480,16 @@ if st.session_state.mode == "visualizer":
         st.markdown('<span class="titik-label" style="background:#EF233C;">🔴  Titik 1</span>',
                     unsafe_allow_html=True)
         a1, b1 = st.columns(2)
-        with a1: x1_str = st.text_input("x₁  =", value="0", key="vi_x1")
-        with b1: y1_str = st.text_input("y₁  =", value="0", key="vi_y1")
+        with a1: x1_str = st.text_input("x₁  =", value="", placeholder="contoh: 2", key="vi_x1")
+        with b1: y1_str = st.text_input("y₁  =", value="", placeholder="contoh: 6", key="vi_y1")
         st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
         # Titik 2
         st.markdown('<span class="titik-label" style="background:#4361EE;">🔵  Titik 2</span>',
                     unsafe_allow_html=True)
         a2, b2 = st.columns(2)
-        with a2: x2_str = st.text_input("x₂  =", value="4", key="vi_x2")
-        with b2: y2_str = st.text_input("y₂  =", value="8", key="vi_y2")
+        with a2: x2_str = st.text_input("x₂  =", value="", placeholder="contoh: 1", key="vi_x2")
+        with b2: y2_str = st.text_input("y₂  =", value="", placeholder="contoh: 3", key="vi_y2")
         st.markdown("---")
 
         # Buttons
@@ -557,8 +556,6 @@ if st.session_state.mode == "visualizer":
                 <div style="color:#94A3B8;font-size:1rem;margin:10px 0;">
                     Masukkan koordinat<br>lalu klik Hitung Gradien</div>
             </div>""", unsafe_allow_html=True)
-
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with right_col:
         st.markdown("**Visualisasi Grafik**")
